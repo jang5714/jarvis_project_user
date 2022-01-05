@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 
 
 
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET', 'POST', 'PUT'])
 @parser_classes([JSONParser])
 def users(request):
     if request.method == 'GET':
@@ -39,15 +39,7 @@ def users(request):
             return JsonResponse({'modify': 'SUCCESS'})
         except:
             return JsonResponse({'modify': '수정하고자 하는 user가 없습니다.'})
-    # elif request.method == 'DELETE':
-    #     deluser = request.data
-    #     try:
-    #         dbuser = User.objects.get(user_email=deluser['email'])
-    #         if deluser['user_email'] == dbuser.user_email:
-    #             dbuser.delete()
-    #             return JsonResponse({'remove': 'SUCCESS'})
-    #     except:
-    #         return JsonResponse({'remove': 'error 지우고자 하는 user가 없습니다.'})
+
 
 
 
@@ -57,8 +49,6 @@ def login(request):
     loginuser = request.data
     dbUser = User.objects.all().filter(user_email=loginuser['email']).values()[0]
     if loginuser['password'] == dbUser['password']:
-        # token = Token.objects.create(user_email=loginuser['email'])
-        # print(f'생성된 토큰값 : {token}')
         userSerializer = UserSerializer(data=dbUser, many=False)
         print(userSerializer)
         if userSerializer.is_valid():
